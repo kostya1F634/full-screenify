@@ -1,0 +1,20 @@
+{
+    "KPlugin": {
+        "Name": "FullScreenify",
+        "Description": "Move fullscreen window to a new last virtual desktop",
+        "Icon": "preferences-system-windows-effect-maximize",
+
+        "Authors": [
+            {
+                "Name": "Kostya Tatoshin"
+            }
+        ],
+        "Id": "fullscreenify",
+        "Version": "0.0.1",
+        "License": "GPLv3",
+        "EnabledByDefault": true
+    },
+    "X-Plasma-API": "javascript",
+    "X-Plasma-MainScript": "code/main.js",
+    "KPackageStructure": "KWin/Script"
+}
