@@ -11,6 +11,7 @@ const alwaysSkippedWindows = ['kwin', 'kwin_wayland', 'ksmserver-logout-greeter'
     'SkipWindows', 'lattedock', 'latte-dock', 'org.kde.spectacle'];
 
 function shouldSkip(window) {
+    if (window === null) return true;
     const windowClass = (window.resourceClass.toString() || "").toLowerCase();
     if (!windowClass) {
         log(`Skipped: Null`);
