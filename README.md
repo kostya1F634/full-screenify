@@ -1,3 +1,5 @@
+Inspired by [MACsimize6](https://github.com/Ubiquitine/MACsimize6/tree/master) script.
+
 # FullScreenify
 
 Move full screen window to the new desktop after all the existing ones. When exiting from full screen, it returns the window to the original desktop and deletes the created desktop.
