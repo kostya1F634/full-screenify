@@ -1,11 +1,10 @@
-ARCHIVE_NAME := full-screenify.kwinscript
+ARCHIVE_NAME := fullscreenify.kwinscript
 DESTINATION := ~/Downloads/$(ARCHIVE_NAME)
-INSTALL_DIR := ~/.local/share/kwin/scripts/full-screenify
 PACKAGE_DIR := $(shell pwd)
 
-.PHONY: all clean install uninstall
+.PHONY: all clean install uninstall clean-install list env debug interact
 
-all: install
+all: clean-install
 
 package:
 	@echo "Creating tar archive..."
@@ -17,15 +16,24 @@ clean:
 	@rm -f $(DESTINATION)
 	@echo "Archive removed from $(DESTINATION)"
 
-install:
-	@echo "Installing full-screenify script..."
-	@rm -rf $(INSTALL_DIR)  # Удаляем существующую директорию, если она есть
-	@mkdir -p $(INSTALL_DIR) # Создаем новую пустую директорию
-	@cp -r $(PACKAGE_DIR)/* $(INSTALL_DIR)/ # Копируем содержимое
-	@echo "Script installed to $(INSTALL_DIR)"
-
+install: 
+	@kpackagetool6 --type=KWin/Script -i .
+	
 uninstall:
-	@echo "Uninstalling full-screenify script..."
-	@rm -rf $(INSTALL_DIR)
-	@echo "Script removed from $(INSTALL_DIR)"
+	-@kpackagetool6 --type=KWin/Script -r fullscreenify
 
+clean-install:
+	-@kpackagetool6 --type=KWin/Script -r fullscreenify || true
+	@kpackagetool6 --type=KWin/Script -i .
+
+interact:
+	@plasma-interactiveconsole --kwin
+	
+list:
+	@kpackagetool6 --type=KWin/Script --list
+
+env:
+	@set QT_LOGGING_RULES "kwin_*.debug=true"
+
+debug:
+	@journalctl -f QT_CATEGORY=js QT_CATEGORY=kwin_scripting
