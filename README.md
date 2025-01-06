@@ -9,10 +9,16 @@ KWin script that moves full-screened windows to the new desktop after all the ex
 ### From terminal
 #### Requirements
 * make
-```fish
+##### To install
+```bash
 git clone https://github.com/kostya1F634/full-screenify.git
 cd full-screenify
 make
+```
+##### To uninstall
+```bash
+cd full-screenify
+make uninstall
 ```
 ### From settings
 ```
