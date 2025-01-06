@@ -4,7 +4,7 @@ Inspired by [MACsimize6](https://github.com/Ubiquitine/MACsimize6/tree/master) s
 
 Move full screen window to the new desktop after all the existing ones. When exiting from full screen, it returns the window to the original desktop and deletes the created desktop.
 
-## Installation
+## Manual installation
 ### Requirements
 * make
 
@@ -16,5 +16,5 @@ make
 ```
 #### From settings
 ```
-Download repository like archive and install it manually from settings
+Download repository like archive and install it manually from plasma settings
 ```
