@@ -3,6 +3,9 @@ function log(msg) {
 }
 
 const handleWindows = new Map();
+const isMoved = 2;
+const newDesktopNum = 3;
+const originDesktopNum = 1;
 
 const alwaysSkippedWindows = [
     'kwin', 'kwin_wayland', 'ksmserver-logout-greeter', 'ksmserver',
@@ -26,34 +29,37 @@ function shouldSkip(window) {
 }
 
 function moveToNewDesktop(window) {
+    let windowId = window.internalId.toString();
     let windowName = window.caption.toString();
-    log("Creating new desktop after all existing ones for window: " + windowName);
+    log(`Creating new desktop and move window: ${windowId}`);
     let newDesktopNumber = workspace.desktops.length;
     workspace.createDesktop(newDesktopNumber, windowName);
     let newDesktop = workspace.desktops[newDesktopNumber];
     window.desktops = [newDesktop];
     workspace.currentDesktop = newDesktop;
-    log("Window moved to new desktop: " + newDesktop.name);
+    handleWindows.get(windowId)[isMoved] = true;
+    handleWindows.get(windowId).push(newDesktop);
 }
 
 function restoreDesktop(window) {
     let windowId = window.internalId.toString();
-    if (handleWindows.has(windowId)) {
-        let originDesktop = handleWindows.get(windowId)[1];
-        window.desktops = [originDesktop];
-        workspace.removeDesktop(workspace.currentDesktop);
-        workspace.currentDesktop = originDesktop;
-        handleWindows.delete(windowId);
-    }
+    if (!handleWindows.get(windowId)[isMoved]) return;
+    log(`Restoring window: ${window.internalId.toString()}`);
+    let originDesktop = handleWindows.get(windowId)[originDesktopNum];
+    window.desktops = [originDesktop];
+    workspace.removeDesktop(handleWindows.get(windowId)[newDesktopNum]);
+    workspace.currentDesktop = originDesktop;
+    handleWindows.get(windowId)[isMoved] = false;
+    handleWindows.get(windowId).pop();
 }
 
 function fullScreenChanged(window) {
-    let windowName = window.caption.toString();
-    if (window.fullScreen) {
-        log("Full-screen change: fullscreen: " + windowName);
+    let windowId = window.internalId.toString();
+    if (window.fullScreen && !handleWindows.get(windowId)[isMoved]) {
+        log(`Full-screen change fullscreen window: ${windowId}`);
         moveToNewDesktop(window);
     } else {
-        log("Full-screen change: restore: " + windowName);
+        log(`Full-screen change restore window: ${windowId}`);
         restoreDesktop(window);
         workspace.raiseWindow(window);
     }
@@ -62,7 +68,7 @@ function fullScreenChanged(window) {
 function windowCaptionChanged(window) {
     let windowId = window.internalId.toString();
     let windowName = window.caption.toString();
-    if (handleWindows.has(windowId)) {
+    if (handleWindows.get(windowId)[isMoved]) {
         log(`Updating desktop name for ${windowId}`);
         window.desktops[0].name = windowName;
     }
@@ -71,21 +77,23 @@ function windowCaptionChanged(window) {
 function installWindowHandlers(window) {
     if (!shouldSkip(window) && window !== null && window.normalWindow && !window.skipTaskbar && !window.splash && window.fullScreenable) {
         let windowId = window.internalId.toString();
-        let windowName = window.caption.toString();
         if (handleWindows.has(windowId)) {
             log(`Already handling window: ${windowId}`);
             return;
         } else {
             log(`Add window to handle: ${windowId}`);
-            handleWindows.set(windowId, [window, workspace.currentDesktop]);
+            handleWindows.set(windowId, [window, workspace.currentDesktop, false]);
         }
         if (window.fullScreenable) {
-            log("Connecting handler on fullScreenChanged: " + windowName);
+            log("Connecting handler on fullScreenChanged: " + windowId);
             window.fullScreenChanged.connect(() => fullScreenChanged(window));
-            // window.captionChanged.connect(() => windowCaptionChanged(window));
+            window.captionChanged.connect(() => windowCaptionChanged(window));
         }
-        log("Connecting handler on close: " + windowName);
-        window.closed.connect(() => restoreDesktop(window));
+        log("Connecting handler on close: " + windowId);
+        window.closed.connect(() => {
+            restoreDesktop(window);
+            handleWindows.delete(windowId);
+        });
     }
 }
 
