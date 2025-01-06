@@ -2,7 +2,7 @@ Inspired by [MACsimize6](https://github.com/Ubiquitine/MACsimize6/tree/master) s
 
 # FullScreenify
 
-Move full screen window to the new desktop after all the existing ones. When exiting from full screen, it returns the window to the original desktop and deletes the created desktop.
+KWin script that moves full-screened windows to the new desktop after all the existing ones. When window exiting from full-screen, it returns to the original desktop and created desktop is deleted.
 
 ## Manual installation
 ### Requirements
