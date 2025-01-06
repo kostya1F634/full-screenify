@@ -3,15 +3,16 @@
         "Name": "FullScreenify",
         "Description": "KWin script that moves full-screened windows to the new desktop after all the existing ones.",
         "Icon": "preferences-system-windows-effect-maximize",
-
         "Authors": [
             {
                 "Name": "Kostya Tatoshin"
             }
         ],
         "Id": "fullscreenify",
-        "Version": "0.1.0",
+        "Version": "0.1.1",
+        "Category": "kwin",
         "License": "GPLv3",
+        "Website": "https://github.com/kostya1F634/full-screenify",
         "EnabledByDefault": true
     },
     "X-Plasma-API": "javascript",
