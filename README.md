@@ -22,5 +22,5 @@ make uninstall
 ```
 ### From settings
 ```
-Download repository like archive and install it manually from plasma settings
+Download latest release version and manually install in plasma settings
 ```
