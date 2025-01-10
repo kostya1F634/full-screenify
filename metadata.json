@@ -9,7 +9,7 @@
             }
         ],
         "Id": "fullscreenify",
-        "Version": "0.1.1",
+        "Version": "0.1.2",
         "Category": "kwin",
         "License": "GPLv3",
         "Website": "https://github.com/kostya1F634/full-screenify",
