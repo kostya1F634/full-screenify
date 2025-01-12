@@ -43,19 +43,18 @@ function moveToNewDesktop(window) {
 
 function restoreDesktop(window) {
     let windowId = window.internalId.toString();
+    log(`Restoring window: ${window.internalId.toString()}`);
     if (!handleWindows.get(windowId)[isMoved]) return;
     let originDesktop = handleWindows.get(windowId)[originDesktopNum];
-    if (originDesktop == null) {
-        log(`Origin desktop is null. Moving to desktop 0.`);
-        originDesktop = workspace.desktops[0];
-    }
+    let newDesktop = handleWindows.get(windowId)[newDesktopNum];
     if (!workspace.desktops.includes(originDesktop)) {
         log(`Origin desktop does not exist in workspace. Moving to desktop 0.`);
         originDesktop = workspace.desktops[0];
     }
-    log(`Restoring window: ${window.internalId.toString()}`);
     window.desktops = [originDesktop];
-    workspace.removeDesktop(handleWindows.get(windowId)[newDesktopNum]);
+    if (workspace.desktops.includes(newDesktop)) {
+        workspace.removeDesktop(newDesktop);
+    }
     workspace.currentDesktop = originDesktop;
     handleWindows.get(windowId)[isMoved] = false;
     handleWindows.get(windowId).pop();
