@@ -21,6 +21,6 @@ cd full-screenify
 make uninstall
 ```
 ### From settings
-```
-Download latest release version and manually install in plasma settings
-```
+* Download latest release version and manually install in plasma settings
+* from [site](https://store.kde.org/p/2238849)
+* from settings scripts
